@@ -9,23 +9,24 @@ export const authOptions : NextAuthOptions = {
         CredentialsProvider({
           name : "credentials",
           credentials : {
+            username : {label : "username",type : "text"},
             email: { label: "email", type: "text" },
             password: { label: "Password", type: "password" }
           },
           async authorize(credentials : any) : Promise<any>{
             await dbconnect()
-            try {
-                const user = await UserModel.findOne({
+               try {
+                  const user = await UserModel.findOne({
                     $or:[
-                        {email : credentials.identifiers},
-                        {username : credentials.identifiers}
+                        {email : credentials.email},
+                        {username : credentials.username}
                     ]    
                 })
                 if(!user){
                   throw new Error("No user exist with this email or username")
                 } else{
-                   const ispasscorrect = await bcrypt.compare(credentials.password,user.password)
-                   if(ispasscorrect){
+                  //  const ispasscorrect = await bcrypt.compare(credentials.password,user.password)
+                   if(credentials.password == user.password){
                       return user
                    } else{
                     throw new Error("Incorrect password")
@@ -39,17 +40,17 @@ export const authOptions : NextAuthOptions = {
     ],
     callbacks : {
         async session({ session, token }) {
-            // if(token){
-            //     session.user._id = token._id,
-                // session.user.username = token.username
-            // }
+            if(token){
+                session.user._id = token._id,
+                session.user.username = token.username
+            }
             return session
           },
           async jwt({ token, user, }) {
-            // if(user){
-            //    token._id = user._id?.toString();
-            //    token.username = user.username;
-            // }                                    // 
+            if(user){
+               token._id = user._id?.toString();
+               token.username = user.username;
+            }                                    
             return token
           }
     },
