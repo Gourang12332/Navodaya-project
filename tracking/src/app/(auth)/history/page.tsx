@@ -1,9 +1,10 @@
 'use client'
+import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 
 export default function page() {
     const [history,setHistory] = useState([])
-
+    const {data : session} = useSession();   // object destructoring
     const HandleSubmit = async () =>{
         const response = await fetch('/api/history' , {
             method: "Post",
@@ -12,6 +13,23 @@ export default function page() {
         console.log(result.users[0]);  // array of objects
         setHistory(result.users)
     }
+
+    if(!session){
+      return(
+        <>
+          <p>First be authenticated to Fetch organization history
+            <br />
+            only for navodaya employees
+          </p>
+
+          <button className="signin" onClick={() =>{
+          window.location.href = "/sign-in"
+          }}>
+  Sign in
+</button>
+</>
+      )
+     }
   return (
     <>
     <ol>{
