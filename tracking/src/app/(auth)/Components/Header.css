@@ -1,0 +1,53 @@
+html body{
+    height: 100%;
+}
+#main {
+    padding: 0px;
+    box-sizing: border-box;
+    margin: 0px;
+    width: 100%;
+    height: 4rem;
+    background-color: yellow;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem;
+}
+.left1{
+    height: 90%;
+    width: 18rem;
+    padding: 0.5rem;
+    background-color: black;
+}
+
+.right1{
+    height: 90%;
+    width: 8rem;
+    padding: 0.5rem;
+    background-color: yellow;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem;
+}
+
+.logo {
+    height: 100%;
+    background-color: yellow;
+    width: 3rem;
+    border: 1px solid;
+    border-color: black;
+    border-radius: 70%;
+}
+.welcome {
+    height: 100%;
+    background-color: yellow;
+    padding: 0.02rem;
+    width: 4.4rem;
+    color: black;
+}
+
+img{
+    width: 100%;
+    height: 100%;
+    object-fit : cover;
+    border-radius: 70%;
+}

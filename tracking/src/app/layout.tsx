@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "./context/AuthProvider";
-
+import Navbar from "./(auth)/Components/Navbar";
+// import { usePathname } from "next/navigation";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -23,11 +24,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // const hidenav = ['/sign-in']
+  // const pathname = usePathname();
+  // const hides = hidenav.includes(pathname)
   return (
     <html lang="en">
       <AuthProvider>      
         <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* {!hides ? (<Navbar></Navbar>):(<></>)} */}
         {children}
       </body>
       </AuthProvider>
