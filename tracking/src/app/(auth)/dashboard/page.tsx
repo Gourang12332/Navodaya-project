@@ -6,9 +6,12 @@ export default function Dashboard() {
   const [error, setError] = useState<string | undefined>(undefined);
 
   const { data: session } = useSession();
-
   if (!session) {
-    return <p>Not authenticated</p>;
+    return (
+      <>
+        <p>Not authenticated</p>
+      </>
+    );
   }
 
   async function handleDocketPunch(e: React.FormEvent) {
