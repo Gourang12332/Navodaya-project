@@ -12,21 +12,16 @@ export async function PUT(
 
     const body = await request.json();
 
-    const {
-      basics_source,
-      basics_destination,
-      basics_no_of_pieces,
-      basics_mode_of_payment,
-      basics_transport_mode,
-    } = body;
+    const { source, destination, no_of_pcs, mode_of_payment, transport_mode } =
+      body;
 
     // Validate required fields
     if (
-      !basics_source ||
-      !basics_destination ||
-      !basics_no_of_pieces ||
-      !basics_mode_of_payment ||
-      !basics_transport_mode
+      !source ||
+      !destination ||
+      !no_of_pcs ||
+      !mode_of_payment ||
+      !transport_mode
     ) {
       return new Response("Invalid body data", { status: 400 });
     }
@@ -39,11 +34,11 @@ export async function PUT(
     }
 
     // Update the fields in the tracking record
-    trackingRecord.source = basics_source;
-    trackingRecord.destination = basics_destination;
-    trackingRecord.no_of_pcs = parseInt(basics_no_of_pieces, 10);
-    trackingRecord.mode_of_payment = basics_mode_of_payment;
-    trackingRecord.transport_mode = basics_transport_mode;
+    trackingRecord.source = source;
+    trackingRecord.destination = destination;
+    trackingRecord.no_of_pcs = parseInt(no_of_pcs, 10);
+    trackingRecord.mode_of_payment = mode_of_payment;
+    trackingRecord.transport_mode = transport_mode;
 
     // Save the updated record
     await trackingRecord.save();

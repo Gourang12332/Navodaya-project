@@ -11,6 +11,7 @@ export default function TrackingPage({
   const [trackingData, setTrackingData] = useState<Tracking | null>(null);
   const [docketid, setDocketid] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
+  const [showModal, setShowModal] = useState(false);
   const [expandedUpdate, setExpandedUpdate] = useState<number | null>(null);
 
   useEffect(() => {
@@ -167,7 +168,7 @@ export default function TrackingPage({
                         <p>
                           <span className="text-[#800000] font-medium">
                             Destination:
-                          </span>{" "}
+                          </span>
                           <span className="text-gray-700">
                             {update.dest_location}
                           </span>
@@ -175,7 +176,7 @@ export default function TrackingPage({
                         <p>
                           <span className="text-[#800000] font-medium">
                             Status:
-                          </span>{" "}
+                          </span>
                           <span
                             className={`capitalize ${getTextColor(update.status)}`}
                           >
@@ -185,7 +186,7 @@ export default function TrackingPage({
                         <p>
                           <span className="text-[#800000] font-medium">
                             Remarks:
-                          </span>{" "}
+                          </span>
                           <span className="text-gray-700">
                             {update.remarks}
                           </span>
@@ -193,7 +194,7 @@ export default function TrackingPage({
                         <p>
                           <span className="text-[#800000] font-medium">
                             Timestamp:
-                          </span>{" "}
+                          </span>
                           <span className="text-gray-700">
                             {new Date(update.arrived_at).toLocaleString()}
                           </span>

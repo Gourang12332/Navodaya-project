@@ -39,7 +39,13 @@ export type Body_Punch_Route = {
 export type Update = {
   curr_location: string;
   dest_location: string;
-  status: "arrived" | "departed" | "other";
+  status:
+    | "arrived"
+    | "departed"
+    | "cancelled"
+    | "delivered"
+    | "tried"
+    | "other";
   remarks: string;
   arrived_at: Date;
 };
