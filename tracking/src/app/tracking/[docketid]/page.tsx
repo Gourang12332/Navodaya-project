@@ -40,6 +40,12 @@ export default function TrackingPage({
         return "bg-green-600";
       case "departed":
         return "bg-yellow-500";
+      case "cancelled":
+        return "bg-red-500";
+      case "tried":
+        return "bg-orange-500";
+      case "delivered":
+        return "bg-green-800";
       default:
         return "bg-blue-600";
     }
@@ -51,6 +57,12 @@ export default function TrackingPage({
         return "text-green-600";
       case "departed":
         return "text-yellow-600";
+      case "cancelled":
+        return "text-red-500";
+      case "tried":
+        return "text-orange-500";
+      case "delivered":
+        return "text-green-800";
       default:
         return "text-blue-600";
     }
@@ -191,6 +203,17 @@ export default function TrackingPage({
                             {update.remarks}
                           </span>
                         </p>
+
+                        {update.reason && (
+                          <p>
+                            <span className="text-[#800000] font-medium">
+                              Reason:
+                            </span>
+                            <span className="text-gray-700">
+                              {update.reason}
+                            </span>
+                          </p>
+                        )}
                         <p>
                           <span className="text-[#800000] font-medium">
                             Timestamp:

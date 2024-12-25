@@ -1,5 +1,4 @@
 import TrackingModel from "@/app/models/tracking";
-import { stat } from "fs";
 
 export async function PUT(
   request: Request,
@@ -25,6 +24,10 @@ export async function PUT(
 
     if (!trackingRecord) {
       return new Response("Tracking record not found", { status: 404 });
+    }
+
+    if (status == "delivered" || status == "cancelled") {
+      trackingRecord.history = true;
     }
 
     const newUpdate = {

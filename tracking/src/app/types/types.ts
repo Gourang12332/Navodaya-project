@@ -3,6 +3,7 @@ export type Tracking = {
   source: string;
   destination: string;
   docs_assigned: boolean;
+  history: boolean;
   no_of_pcs: number;
   mode_of_payment: string;
   transport_mode: string;
@@ -47,6 +48,7 @@ export type Update = {
     | "tried"
     | "other";
   remarks: string;
+  reason?: string;
   arrived_at: Date;
 };
 
