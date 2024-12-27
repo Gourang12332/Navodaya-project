@@ -1,6 +1,6 @@
 "use client";
 import { useSession, signOut } from "next-auth/react";
-
+import { useState } from "react";
 
 export default function Dashboard() {
   const [error, setError] = useState<string | undefined>(undefined);

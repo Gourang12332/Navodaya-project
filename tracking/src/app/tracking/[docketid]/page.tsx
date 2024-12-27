@@ -11,7 +11,6 @@ export default function TrackingPage({
   const [trackingData, setTrackingData] = useState<Tracking | null>(null);
   const [docketid, setDocketid] = useState("");
   const [loading, setLoading] = useState<boolean>(true);
-  const [showModal, setShowModal] = useState(false);
   const [expandedUpdate, setExpandedUpdate] = useState<number | null>(null);
 
   useEffect(() => {

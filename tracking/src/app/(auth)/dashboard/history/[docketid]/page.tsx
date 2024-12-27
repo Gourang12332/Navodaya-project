@@ -9,7 +9,7 @@ export default function DocketHistory({
   params: { docketid: string };
 }) {
   const [docket, setDocket] = useState<Tracking | undefined>();
-  const [docketid, setDocketid] = useState("");
+  //const [docketid, setDocketid] = useState("");
   const [pdfUploaded, setPdfUploaded] = useState(false);
 
   useEffect(() => {
@@ -24,17 +24,18 @@ export default function DocketHistory({
         const data: Tracking = await resp.json();
         console.log(data);
         setDocket(data);
-        setDocketid(docketid);
+        //       setDocketid(docketid);
       } catch (err) {
         console.log(err);
       }
     }
     getDocket();
-  }, []);
+  }, [params]);
 
   const handleUpload = () => {
     console.log("Upload button clicked");
     // Future logic for file upload goes here
+    setPdfUploaded(true);
   };
 
   const handleDownload = () => {
