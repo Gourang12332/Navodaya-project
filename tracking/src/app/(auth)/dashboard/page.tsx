@@ -1,7 +1,6 @@
 "use client";
 import { useSession, signOut } from "next-auth/react";
-
-
+import {Uploads} from "../Components/Uploads"
 export default function Dashboard() {
  
 
@@ -28,6 +27,7 @@ export default function Dashboard() {
       >
         Sign Out
       </button>
+      <Uploads></Uploads>
     </div>
   );
 }
