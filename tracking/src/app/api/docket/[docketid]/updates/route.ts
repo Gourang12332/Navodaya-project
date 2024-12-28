@@ -14,19 +14,9 @@ export async function PUT(
     const body = await request.json();
     console.log(body);
 
-    const {
-      update_currlocation,
-      update_deslocation,
-      update_status,
-      update_remarks,
-    } = body;
+    const { curr_location, dest_location, status, remarks, reason } = body;
 
-    if (
-      !update_currlocation ||
-      !update_deslocation ||
-      !update_status ||
-      !update_remarks
-    ) {
+    if (!curr_location || !dest_location || !status || !remarks) {
       return new Response("Invalid body data", { status: 400 });
     }
 
@@ -36,11 +26,16 @@ export async function PUT(
       return new Response("Tracking record not found", { status: 404 });
     }
 
+    if (status == "delivered" || status == "cancelled") {
+      trackingRecord.history = true;
+    }
+
     const newUpdate = {
-      curr_location: update_currlocation,
-      dest_location: update_deslocation,
-      status: update_status,
-      remarks: update_remarks,
+      curr_location: curr_location,
+      dest_location: dest_location,
+      status: status,
+      reason: reason,
+      remarks: remarks,
       arrived_at: new Date(),
     };
 

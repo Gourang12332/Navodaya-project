@@ -3,6 +3,7 @@ export type Tracking = {
   source: string;
   destination: string;
   docs_assigned: boolean;
+  history: boolean;
   no_of_pcs: number;
   mode_of_payment: string;
   transport_mode: string;
@@ -39,8 +40,15 @@ export type Body_Punch_Route = {
 export type Update = {
   curr_location: string;
   dest_location: string;
-  status: "arrived" | "departed" | "other";
+  status:
+    | "arrived"
+    | "departed"
+    | "cancelled"
+    | "delivered"
+    | "tried"
+    | "other";
   remarks: string;
+  reason?: string;
   arrived_at: Date;
 };
 

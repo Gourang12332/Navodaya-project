@@ -1,9 +1,13 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Tracking, Update, Party } from "@/app/types/types";
+import { GeneralModal, Modal } from "@/components/Modal";
 
 const TrackingForm = ({ params }: { params: { docketid: string } }) => {
   const [docketid, setDocketId] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [reason, setReason] = useState<string | undefined>(undefined);
+  const [showModal, setShowModal] = useState(false);
   const [activeSection, setActiveSection] = useState<
     "updates" | "parties" | "basics"
   >("updates");
@@ -58,65 +62,46 @@ const TrackingForm = ({ params }: { params: { docketid: string } }) => {
     fetchTracking();
   }, [params]);
 
+  function handleReason(e: React.ChangeEvent<HTMLInputElement>) {
+    setReason(e.target.value);
+  }
+
   const handleUpdateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const form = e.currentTarget as HTMLFormElement;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-
-    try {
-      const response = await fetch(`/api/docket/${docketid}/updates`, {
-        method: "PUT",
-
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Something Went Wrong`);
-      }
-
-      const res_data = await response.json();
-      console.log(res_data);
-    } catch (err) {
-      console.log(err);
-    }
-
-    console.log("Submitting update:", newUpdate);
+    setShowModal(true);
   };
 
   const handlePartySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const form = e.currentTarget as HTMLFormElement;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
-
-    try {
-      const response = await fetch(`/api/docket/${docketid}/party`, {
-        method: "PUT",
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok) {
-        console.log("Something went wrong");
-        return;
-      }
-
-      const res_data = await response.json();
-      console.log(res_data);
-    } catch (err) {
-      console.log(err);
-    }
-    console.log("Submitting party update:", partyToEdit, partyDetails);
+    setShowModal(true);
   };
 
   const handleBasicsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const form = e.currentTarget as HTMLFormElement;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
+    setShowModal(true);
+  };
+
+  function handleClose() {
+    setShowModal(false);
+    setReason(undefined);
+  }
+
+  async function handleModalSubmit() {
+    let data = {};
+
+    if (activeSection == "updates") {
+      data = newUpdate;
+      data = { ...data, reason: reason };
+    } else if (activeSection == "parties") {
+      data = partyDetails;
+      data = { ...data, party_value: partyToEdit };
+    } else if (activeSection == "basics") {
+      data = basicDetails;
+    }
 
     try {
-      const response = await fetch(`/api/docket/${docketid}/basic`, {
+      setLoading(true);
+      const response = await fetch(`/api/docket/${docketid}/${activeSection}`, {
         method: "PUT",
         body: JSON.stringify(data),
       });
@@ -128,11 +113,43 @@ const TrackingForm = ({ params }: { params: { docketid: string } }) => {
 
       const res_data = await response.json();
       console.log(res_data);
+
+      setLoading(false);
+      setShowModal(false);
+      setNewUpdate({
+        curr_location: "",
+        dest_location: "",
+        status: "arrived",
+        remarks: "",
+      });
+      setPartyDetails({
+        code: "",
+        name: "",
+        company: "",
+        address: "",
+        city: "",
+        pin: undefined,
+        tel: undefined,
+      });
+      setBasicDetails({
+        source: "",
+        destination: "",
+        no_of_pcs: 0,
+        mode_of_payment: "",
+        transport_mode: "",
+      });
     } catch (err) {
       console.log(err);
     }
     console.log("Submitting basic details:", basicDetails);
-  };
+  }
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#800000]"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-4">
@@ -194,6 +211,9 @@ const TrackingForm = ({ params }: { params: { docketid: string } }) => {
             >
               <option value="arrived">Arrived</option>
               <option value="departed">Departed</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="delivered">Delivered</option>
+              <option value="tried">Tried But Not Delivered</option>
               <option value="other">Other</option>
             </select>
             <input
@@ -394,6 +414,66 @@ const TrackingForm = ({ params }: { params: { docketid: string } }) => {
           </button>
         </form>
       )}
+
+      <Modal visible={showModal} onClose={handleClose}>
+        {activeSection === "updates" ? (
+          newUpdate.status === "arrived" ? (
+            <GeneralModal
+              confirmationText={`Are You Sure You Want to Add ${newUpdate.status} status to This update?`}
+              showForm={false}
+              handleSubmit={handleModalSubmit}
+              onClose={handleClose}
+            ></GeneralModal>
+          ) : newUpdate.status === "departed" ? (
+            <GeneralModal
+              confirmationText={`Are You Sure You Want to Add ${newUpdate.status} status to This update?`}
+              showForm={false}
+              handleSubmit={handleModalSubmit}
+              onClose={handleClose}
+            ></GeneralModal>
+          ) : newUpdate.status == "other" ? (
+            <GeneralModal
+              confirmationText={`Are You Sure You Want to Add ${newUpdate.status} status to This update?`}
+              showForm={false}
+              handleSubmit={handleModalSubmit}
+              onClose={handleClose}
+            ></GeneralModal>
+          ) : newUpdate.status == "cancelled" ? (
+            <GeneralModal
+              confirmationText={`Marking this docker cancelled will disallow you to from adding any more updates on this docker and move it to the history. Are You Sure You want to add this update ?`}
+              showForm={true}
+              handleForm={handleReason}
+              handleSubmit={handleModalSubmit}
+              onClose={handleClose}
+            ></GeneralModal>
+          ) : newUpdate.status == "tried" ? (
+            <GeneralModal
+              confirmationText={`Are You Sure You Want to Add ${newUpdate.status} status to This update?`}
+              showForm={true}
+              handleForm={handleReason}
+              handleSubmit={handleModalSubmit}
+              onClose={handleClose}
+            ></GeneralModal>
+          ) : newUpdate.status == "delivered" ? (
+            <GeneralModal
+              confirmationText={`Marking this docker delivered will disallow you to from adding any more updates on this docker and move it to the history. Are You Sure You want to add this update ?`}
+              showForm={true}
+              handleForm={handleReason}
+              handleSubmit={handleModalSubmit}
+              onClose={handleClose}
+            ></GeneralModal>
+          ) : (
+            <div>Wrong</div>
+          )
+        ) : (
+          <GeneralModal
+            confirmationText="Are You Sure You Want To Update?"
+            showForm={false}
+            handleSubmit={handleModalSubmit}
+            onClose={handleClose}
+          ></GeneralModal>
+        )}
+      </Modal>
     </div>
   );
 };
