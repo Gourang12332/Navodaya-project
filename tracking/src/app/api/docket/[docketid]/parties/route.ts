@@ -12,25 +12,16 @@ export async function PUT(
 
     const body = await request.json();
 
-    const {
-      party_value,
-      party_code,
-      party_name,
-      party_company,
-      party_address,
-      party_city,
-      party_pin,
-      party_telephone,
-    } = body;
+    const { party_value, code, name, company, address, city, pin, tel } = body;
 
     if (
       !party_value ||
       !["consignor", "consignee"].includes(party_value) ||
-      !party_code ||
-      !party_name ||
-      !party_company ||
-      !party_address ||
-      !party_city
+      !code ||
+      !name ||
+      !company ||
+      !address ||
+      !city
     ) {
       return new Response("Invalid body data", { status: 400 });
     }
@@ -42,13 +33,13 @@ export async function PUT(
     }
 
     const updatedParty = {
-      code: party_code,
-      name: party_name,
-      company: party_company,
-      address: party_address,
-      city: party_city,
-      pin: party_pin ? parseInt(party_pin) : undefined,
-      tel: party_telephone ? parseInt(party_telephone) : undefined,
+      code: code,
+      name: name,
+      company: company,
+      address: address,
+      city: city,
+      pin: pin ? parseInt(pin) : undefined,
+      tel: tel ? parseInt(tel) : undefined,
     };
 
     if (party_value === "consignor") {

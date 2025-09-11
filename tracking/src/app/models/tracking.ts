@@ -7,6 +7,7 @@ const TrackingSchema: Schema<Tracking> = new Schema({
   docs_assigned: Boolean,
   no_of_pcs: Number,
   transport_mode: String,
+  history: Boolean,
   mode_of_payment: String,
   destination: String,
   created_at: { type: Date, default: Date.now },

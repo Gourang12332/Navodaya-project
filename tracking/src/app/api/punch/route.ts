@@ -5,6 +5,7 @@ export async function POST(request: Request) {
   try {
     const res: Body_Punch_Route = await request.json();
     const docsAssigned = res.docs_assigned === "on" ? true : false;
+    const history = false;
 
     const tracking = new TrackingModel({
       docket_id: Number(res.docketid),
@@ -12,6 +13,7 @@ export async function POST(request: Request) {
       destination: res.destination,
       mode_of_payment: res.mode_of_payment,
       transport_mode: res.mode_of_transport,
+      history: false,
       no_of_pcs: Number(res.no_of_pcs),
       docs_assigned: docsAssigned,
       consignor: {

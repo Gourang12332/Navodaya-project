@@ -1,10 +1,7 @@
 import TrackingModel from "@/app/models/tracking";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { docketid: string } },
-) {
+export async function GET({ params }: { params: { docketid: string } }) {
   try {
     const { docketid } = await params;
     console.log(docketid);

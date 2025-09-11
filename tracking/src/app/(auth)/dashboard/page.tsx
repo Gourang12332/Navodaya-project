@@ -5,18 +5,15 @@ export default function Dashboard() {
  
 
   const { data: session } = useSession();
-
   if (!session) {
     return (
-    <>
-    <p>Not authenticated</p>
-    <button className="signin" onClick={() =>{
-      window.location.href = "/sign-in"
-    }}>
-      Sign in
-    </button>
-    </> )
+
+      <>
+        <p>Not authenticated</p>
+      </>
+    );
   }
+
 
   return(
     <div>

@@ -1,11 +1,12 @@
-"use client"
+"use client";
+
 
 import React from "react";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 
 
-export default function page () {
+export default function Page () {
 
      const [error, setError] = useState<string | undefined>(undefined);
        const { data: session } = useSession();
@@ -252,3 +253,4 @@ export default function page () {
             </div>
         )
 }
+
